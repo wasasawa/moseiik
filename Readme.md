@@ -14,6 +14,8 @@ Cette commande recompose l'image `assets/target-small.png` en utilisant les vign
 
 ## Description du projet
 
+Dans ce projet, les images sont gérées par le [crate](https://doc.rust-lang.org/book/ch07-01-packages-and-crates.html) [image](https://docs.rs/image/0.24.8/image/). Toutes les images sont de type [RgbImage](https://docs.rs/image/0.24.8/image/type.RgbImage.html) qui implemente le trait [EQ](https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html), ce qui signifie que l'égalité entre deux images peut être testée en utilisant le double égal `==`.
+
 Différentes étapes sont nécessaires pour créer la mosaïque :
 
 ### Préparation des vignettes
@@ -68,7 +70,9 @@ Les tests d'intégration se trouvent dans le dossier `tests`. De même que pour 
 
 Le dossier assets contient une image nommée `assets/ground-truth-kit.png` qui est un exemple de mosaïque obtenue avec la base téléchargeable et l'image `assets/kit.png`. Les vignettes sont de taille 25 et l'image est conservée à sa taille d'origine. Il pourrait être intéressant de regénérer cette image et vérifier que l'image générée est identique à la vérité terrain.
 
-## Executer les tests localement
+Attention, les tests d'intégration ne sont pas éxecutés si au moins un test unitaire ne passe pas.
+
+## Executer les tests localement avec Docker
 
 ### Création d'une image Docker
 
