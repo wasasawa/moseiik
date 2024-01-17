@@ -22,41 +22,41 @@ struct Size {
 
 #[derive(Parser, Debug, Clone)]
 #[command(author, version, about, long_about = None)]
-struct Options {
+pub struct Options {
     /// Location of the target image
     #[arg(short, long)]
-    image: String,
+    pub image: String,
 
     /// Saved result location
     #[arg(short, long, default_value_t=String::from("out.png"))]
-    output: String,
+    pub output: String,
 
     /// Location of the tiles
     #[arg(short, long)]
-    tiles: String,
+    pub tiles: String,
 
     /// Scaling factor of the image
     #[arg(long, default_value_t = 1)]
-    scaling: u32,
+    pub scaling: u32,
 
     /// Size of the tiles
     #[arg(long, default_value_t = 5)]
-    tile_size: u32,
+    pub tile_size: u32,
 
     /// Remove used tile
     #[arg(short, long)]
-    remove_used: bool,
+    pub remove_used: bool,
 
     #[arg(short, long)]
-    verbose: bool,
+    pub verbose: bool,
 
     /// Use SIMD when available
     #[arg(short, long)]
-    simd: bool,
+    pub simd: bool,
 
     /// Specify number of threads to use, leave blank for default
     #[arg(short, long, default_value_t = 1)]
-    num_thread: usize,
+    pub num_thread: usize,
 }
 
 fn count_available_tiles(images_folder: &str) -> i32 {
@@ -275,7 +275,7 @@ fn find_best_tile(target: &RgbImage, tiles: &Vec<RgbImage>, simd: bool, verbose:
     return index_best_tile;
 }
 
-fn compute_mosaic(args: Options) {
+pub fn compute_mosaic(args: Options) {
     let tile_size = Size {
         width: args.tile_size,
         height: args.tile_size,
