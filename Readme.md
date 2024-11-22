@@ -46,7 +46,7 @@ Le code comporte des [attributs](https://doc.rust-lang.org/beta/core/arch/index.
 
 Pour les tests, vous pouvez créer des données vous-même, ou bien utiliser les images du dossier `assets` (un exemple de fonction permettant d'ouvrir une image est disponible au début de la fonction `prepare_target`).
 
-Une base d'images pouvant servir de vignettes est également disponible au lien https://nasext-vaader.insa-rennes.fr/ietr-vaader/images.zip. 
+Une base d'images pouvant servir de vignettes est également disponible au lien https://nasext-vaader.insa-rennes.fr/ietr-vaader/moseiik_test_images.zip.  
 
 Les tests peuvent être executés en utilisant la commande :
 
