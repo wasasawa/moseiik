@@ -501,7 +501,7 @@ mod tests {
         // Compare the two images using the X86 version of the  l1 function inside the unsafe scope
         let result2: i32;
         unsafe {
-            result2 = super::l1_x86_sse2(&img1, &img2);
+            result2 = super::l1_x86_sse2(&img3, &img4);
         }
 
         assert_eq!(result2, 0); // Images are identical so the difference must be 0
