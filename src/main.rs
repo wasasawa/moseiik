@@ -480,8 +480,7 @@ mod tests {
         let expected_res = 255 * 3 * 3 * 3; // 3*3 for the number of pixels and *3 for the 3 RGB
                                             // channels
                                            
-        assert_eq!(result, expected_res); // comparing the output of the function to the expected
-                                          // result
+        assert_eq!(result, expected_res, "Difference value between the black and white 3x3 pictures isn't the right value"); // comparing the output of the function to the expected result
 
         //Testing identical images so the output should be 0 
         let img3: RgbImage;
@@ -504,7 +503,7 @@ mod tests {
             result2 = super::l1_x86_sse2(&img3, &img4);
         }
 
-        assert_eq!(result2, 0); // Images are identical so the difference must be 0
+        assert_eq!(result2, 0,"Difference between 2 identical images should be 0 which is not the case"); // Images are identical so the difference must be 0
     }
 
     // Test case for ARM64 architecture using NEON
@@ -522,7 +521,7 @@ mod tests {
         }
         
         let expected_res = 255 * 3 * 3 * 3;
-        assert_eq!(result, expected_res);
+        assert_eq!(result, expected_res, "Difference value between the black and white 3x3 pictures isn't the right value");
            
         //Testing identical images so the output should be 0 
         let img3: RgbImage;
@@ -545,7 +544,7 @@ mod tests {
            result2 = super::l1_neon(&img1, &img2);
         }
 
-        assert_eq!(result2, 0); // Images are identical so the difference must be 0 
+        assert_eq!(result2, 0,"Difference between 2 identical images should be 0 which is not the case"); // Images are identical so the difference must be 0 
     
     }   
     
@@ -559,7 +558,7 @@ mod tests {
         // Test the generic l1 function
         let result = super::l1_generic(&img1, &img2);
         let expected_res = 255 * 3 * 3 * 3; 
-        assert_eq!(result, expected_res);
+        assert_eq!(result, expected_res, "Difference value between the black and white 3x3 pictures isn't the right value");
 
         // Initialize img3 and img4 outside the match blocks for proper scope
         let img3: RgbImage;
@@ -578,7 +577,7 @@ mod tests {
 
         // Compare the two images using the generic l1 function
         let result2 = super::l1_generic(&img3, &img4);
-        assert_eq!(result2, 0); // Images are identical so the difference must be 0
+        assert_eq!(result2, 0,"Difference between 2 identical images should be 0 which is not the case"); // Images are identical so the difference must be 0
     }
 
     #[test]
@@ -593,8 +592,8 @@ mod tests {
 
         // Assert that each tile has the correct dimensions
         for tile in tiles {
-            assert_eq!(tile.width(), tile_size.width);
-            assert_eq!(tile.height(), tile_size.height);
+            assert_eq!(tile.width(), tile_size.width,"The width of the tile isn't what it's supposed to be");
+            assert_eq!(tile.height(), tile_size.height, "The height of the tile isn't what it's supposed to be");
         }
     }
 
@@ -607,8 +606,8 @@ mod tests {
             .expect("Failed to prepare target image");
 
         // Assert that the resulting image's dimensions are multiples of the tile size
-        assert_eq!(target_image.width() % tile_size.width, 0);
-        assert_eq!(target_image.height() % tile_size.height, 0);
+        assert_eq!(target_image.width() % tile_size.width, 0, "The width of the target isn't a multiple of the tile size");
+        assert_eq!(target_image.height() % tile_size.height, 0, "The height of the target isn't a multiple of the tile size");
 
         // Verify the scaling is applied correctly
         let img : RgbImage;        
@@ -617,9 +616,7 @@ mod tests {
             Err(_) => panic!("Failed to load the img"),
         };
 
-       assert_eq!(target_image.height() / scale, img.height());
-       assert_eq!(target_image.width() / scale, img.width());
+       assert_eq!(target_image.height() / scale, img.height(), "The height wasn't scaled right");
+       assert_eq!(target_image.width() / scale, img.width(), "The width wasn't scaled right");
     }
 }
-
-
