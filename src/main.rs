@@ -580,4 +580,23 @@ mod tests {
         let result2 = super::l1_generic(&img3, &img4);
         assert_eq!(result2, 0); // Images are identical so the difference must be 0
     }
+
+    #[test]
+    fn unit_test_prepare_tiles() {
+        let images_path = "assets/tiles-small";
+        let tile_size = super:: Size { width: 9, height: 9 }; // Define the expected tile size
+        let verbose = true;
+
+        // Prepare tiles
+        let tiles = super::prepare_tiles(images_path, &tile_size, verbose)
+            .expect("Failed to prepare tiles");
+
+        // Assert that each tile has the correct dimensions
+        for tile in tiles {
+            assert_eq!(tile.width(), tile_size.width);
+            assert_eq!(tile.height(), tile_size.height);
+        }
+    }
 }
+
+
