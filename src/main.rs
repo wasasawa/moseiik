@@ -597,6 +597,29 @@ mod tests {
             assert_eq!(tile.height(), tile_size.height);
         }
     }
+
+    #[test]
+    fn unit_test_prepare_target() {
+        let tile_size = super::Size { width: 9, height: 9 }; // Define the expected tile size
+        let scale = 3;  
+
+        let target_image = super::prepare_target("assets/kit.jpeg", scale, &tile_size)
+            .expect("Failed to prepare target image");
+
+        // Assert that the resulting image's dimensions are multiples of the tile size
+        assert_eq!(target_image.width() % tile_size.width, 0);
+        assert_eq!(target_image.height() % tile_size.height, 0);
+
+        // Verify the scaling is applied correctly
+        let img : RgbImage;        
+        match to_rgb("assets/kit.jpeg") {
+            Ok(image) => img = image,
+            Err(_) => panic!("Failed to load the img"),
+        };
+
+       assert_eq!(target_image.height() / scale, img.height());
+       assert_eq!(target_image.width() / scale, img.width());
+    }
 }
 
 
