@@ -438,24 +438,185 @@ fn main() {
     compute_mosaic(args);
 }
 
+
 #[cfg(test)]
 mod tests {
+    //necessary imports
+    use image::Rgb;
+    use image::RgbImage;
+    use image::ImageReader;
+    use std::error::Error;
+
+    // Helper function to create a simple image for testing
+    fn create_test_image(width: u32, height: u32, color: Rgb<u8>) -> RgbImage {
+        let mut img = RgbImage::new(width, height);
+        for x in 0..width {
+            for y in 0..height {
+                img.put_pixel(x, y, color);
+            }
+        }
+        img
+    }
+
+    // Helper function to read an image and convert it to RgbImage
+    fn to_rgb(image_path: &str) -> Result<RgbImage, Box<dyn Error>>  {
+        let target = ImageReader::open(image_path)?.decode()?.into_rgb8();
+        Ok(target)
+    }
+
+    // Test case for x86 architecture using SSE2
     #[test]
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     fn unit_test_x86() {
-        // TODO
-        assert!(true);
+        let img1 = create_test_image(3, 3, Rgb([0, 0, 0])); // Creating a Black image of size 3x3
+        let img2 = create_test_image(3, 3, Rgb([255, 255, 255])); // White image of same dimensions
+        
+        // Unsafe block for calling l1_x86_sse2
+        let result: i32;
+        unsafe {
+            result = super::l1_x86_sse2(&img1, &img2);
+        }
+        
+        let expected_res = 255 * 3 * 3 * 3; // 3*3 for the number of pixels and *3 for the 3 RGB
+                                            // channels
+                                           
+        assert_eq!(result, expected_res, "Difference value between the black and white 3x3 pictures isn't the right value"); // comparing the output of the function to the expected result
+
+        //Testing identical images so the output should be 0 
+        let img3: RgbImage;
+        let img4: RgbImage;
+
+        // Load the images from disk
+        match to_rgb("assets/ground-truth-kit.png") {
+            Ok(image) => img3 = image,
+            Err(_) => panic!("Failed to load img3"),
+        };
+        
+        match to_rgb("assets/ground-truth-kit.png") {
+            Ok(image) => img4 = image,
+            Err(_) => panic!("Failed to load img4"),
+        };
+
+        // Compare the two images using the X86 version of the  l1 function inside the unsafe scope
+        let result2: i32;
+        unsafe {
+            result2 = super::l1_x86_sse2(&img3, &img4);
+        }
+
+        assert_eq!(result2, 0,"Difference between 2 identical images should be 0 which is not the case"); // Images are identical so the difference must be 0
     }
 
+    // Test case for ARM64 architecture using NEON
     #[test]
     #[cfg(target_arch = "aarch64")]
     fn unit_test_aarch64() {
-        assert!(true);
+        let img1 = create_test_image(3, 3, Rgb([0, 0, 0])); // Creating a Black image of size 3x3
+        let img2 = create_test_image(3, 3, Rgb([255, 255, 255])); // White image with the same
+                                                                  // dimensions
+        
+        // Unsafe block for calling l1_neon
+        let result: i32;
+        unsafe {
+            result = super::l1_neon(&img1, &img2);
+        }
+        
+        let expected_res = 255 * 3 * 3 * 3;
+        assert_eq!(result, expected_res, "Difference value between the black and white 3x3 pictures isn't the right value");
+           
+        //Testing identical images so the output should be 0 
+        let img3: RgbImage;
+        let img4: RgbImage;
+
+        // Load the images from disk
+        match to_rgb("assets/ground-truth-kit.png") {
+            Ok(image) => img3 = image,
+            Err(_) => panic!("Failed to load img3"),
+        };
+        
+        match to_rgb("assets/ground-truth-kit.png") {
+            Ok(image) => img4 = image,
+            Err(_) => panic!("Failed to load img4"),
+        };
+
+        // Compare the two images using the l1_neon function inside the unsafe scope
+        let result2: i32;
+        unsafe {
+           result2 = super::l1_neon(&img1, &img2);
+        }
+
+        assert_eq!(result2, 0,"Difference between 2 identical images should be 0 which is not the case"); // Images are identical so the difference must be 0 
+    
+    }   
+    
+    // Generic test case for comparing two images
+    #[test]
+    fn unit_test_generic() {
+        // Create simple black and white images for testing
+        let img1 = create_test_image(3, 3, Rgb([0, 0, 0])); // Black
+        let img2 = create_test_image(3, 3, Rgb([255, 255, 255])); // White
+        
+        // Test the generic l1 function
+        let result = super::l1_generic(&img1, &img2);
+        let expected_res = 255 * 3 * 3 * 3; 
+        assert_eq!(result, expected_res, "Difference value between the black and white 3x3 pictures isn't the right value");
+
+        // Initialize img3 and img4 outside the match blocks for proper scope
+        let img3: RgbImage;
+        let img4: RgbImage;
+
+        // Load the images from disk
+        match to_rgb("assets/ground-truth-kit.png") {
+            Ok(image) => img3 = image,
+            Err(_) => panic!("Failed to load img3"),
+        };
+        
+        match to_rgb("assets/ground-truth-kit.png") {
+            Ok(image) => img4 = image,
+            Err(_) => panic!("Failed to load img4"),
+        };
+
+        // Compare the two images using the generic l1 function
+        let result2 = super::l1_generic(&img3, &img4);
+        assert_eq!(result2, 0,"Difference between 2 identical images should be 0 which is not the case"); // Images are identical so the difference must be 0
     }
 
     #[test]
-    fn unit_test_generic() {
-        // TODO
-        assert!(true);
+    fn unit_test_prepare_tiles() {
+        let images_path = "assets/tiles-small";
+        let tile_size = super:: Size { width: 9, height: 9 }; // Define the expected tile size
+        let verbose = true;
+
+        // Prepare tiles
+        let tiles = super::prepare_tiles(images_path, &tile_size, verbose)
+            .expect("Failed to prepare tiles");
+
+        // Assert that each tile has the correct dimensions
+        for tile in tiles {
+            assert_eq!(tile.width(), tile_size.width,"The width of the tile isn't what it's supposed to be");
+            assert_eq!(tile.height(), tile_size.height, "The height of the tile isn't what it's supposed to be");
+        }
+    }
+
+    #[test]
+    fn unit_test_prepare_target() {
+        let tile_size = super::Size { width: 9, height: 9 }; // Define the expected tile size
+        let scale = 3;  
+
+        let target_image = super::prepare_target("assets/kit.jpeg", scale, &tile_size)
+            .expect("Failed to prepare target image");
+
+        // Assert that the resulting image's dimensions are multiples of the tile size
+        assert_eq!(target_image.width() % tile_size.width, 0, "The width of the target isn't a multiple of the tile size");
+        assert_eq!(target_image.height() % tile_size.height, 0, "The height of the target isn't a multiple of the tile size");
+
+        // Verify the scaling is applied correctly
+        let img : RgbImage;        
+        match to_rgb("assets/kit.jpeg") {
+            Ok(image) => img = image,
+            Err(_) => panic!("Failed to load the img"),
+        };
+
+       assert_eq!(target_image.height() / scale, img.height(), "The height wasn't scaled right");
+       assert_eq!(target_image.width() / scale, img.width(), "The width wasn't scaled right");
     }
 }
