@@ -1,3 +1,7 @@
+# Running the tests
+
+The moseiik_test_images folder should be in this project directory to use the integration test
+
 # Projet Qualité Logiciel
 
 Moseiik est un projet qui permet de générer des mosaïques d'images à partir d'un corpus de vignettes (appelées tiles) et d'une image de référence (appelée target).
