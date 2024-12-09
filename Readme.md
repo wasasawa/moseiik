@@ -1,6 +1,6 @@
-# Running the tests
+# Integration tests 
 
-The moseiik_test_images folder should be in this project directory to use the integration test
+To execute the integration tests, the moseiik_test_images folder should be in this directory, check path in /tests/temp.rs
 
 # Projet Qualité Logiciel
 
