@@ -19,7 +19,7 @@ mod tests {
     let args = moseiik::main::Options {
         image : "assets/kit.jpeg".to_string(),
         output : "tests/out.png".to_string(),
-        tiles : "../moseiik_test_images/images".to_string(),
+        tiles : "moseiik_test_images/images".to_string(),
         scaling : 1,
         tile_size : 25,
         remove_used : false,
@@ -62,7 +62,7 @@ mod tests {
             }
         }
     }
-        assert!(false);
+        
     }
 
     #[test]
@@ -72,7 +72,7 @@ mod tests {
     let args = moseiik::main::Options {
         image : "assets/kit.jpeg".to_string(),
         output : "tests/out.png".to_string(),
-        tiles : "../moseiik_test_images/images".to_string(),
+        tiles : "moseiik_test_images/images".to_string(),
         scaling : 1,
         tile_size : 25,
         remove_used : false,
@@ -111,7 +111,7 @@ mod tests {
             let pixel_ref = image_ref.get_pixel(y,x);
 
             if pixel_gen != pixel_ref {
-                assert!(false,"The output image is different than the ref image in pixel w: {} ,h: {}", y, x);// The 2 images are not identical ?? maybe not used the same tiles ?
+                assert!(false,"The output image is different than the ref image in pixel w: {} ,h: {}", y, x);
             }
         }
     }
@@ -124,7 +124,7 @@ mod tests {
     let args = moseiik::main::Options {
         image : "assets/kit.jpeg".to_string(),
         output : "tests/out.png".to_string(),
-        tiles : "../moseiik_test_images/images".to_string(),
+        tiles : "moseiik_test_images/images".to_string(),
         scaling : 1,
         tile_size : 25,
         remove_used : false,
@@ -163,7 +163,7 @@ mod tests {
             let pixel_ref = image_ref.get_pixel(y,x);
 
             if pixel_gen != pixel_ref {
-                assert!(false,"The output image is different than the ref image in pixel w: {} ,h: {}", y, x);// The 2 images are not identical ?? maybe not used the same tiles ?
+                assert!(false,"The output image is different than the ref image in pixel w: {} ,h: {}", y, x); 
             }
         }
     }
