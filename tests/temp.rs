@@ -35,14 +35,14 @@ mod tests {
     let image_generated : RgbImage;
     match to_rgb("tests/out.png") {
         Ok(image) => image_generated = image,
-        Err(_) => panic!("Failed to load the output image in the generic test")
+        Err(_) => panic!("Failed to load the output image in the x86 test")
     }
     
     // Openning the reference image to compare with the generated image
     let image_ref : RgbImage;
     match to_rgb("assets/ground-truth-kit.png") {
         Ok(image) => image_ref = image,
-        Err(_) => panic!("Couldnt load the provided image in the generic test")
+        Err(_) => panic!("Couldnt load the provided image in the x86 test")
     }
 
     // Testing if the images have the right width/height
@@ -88,14 +88,14 @@ mod tests {
     let image_generated : RgbImage;
     match to_rgb("tests/out.png") {
         Ok(image) => image_generated = image,
-        Err(_) => panic!("Failed to load the output image in the generic test")
+        Err(_) => panic!("Failed to load the output image in the arm64  test")
     }
     
     // Openning the reference image to compare with the generated image
     let image_ref : RgbImage;
     match to_rgb("assets/ground-truth-kit.png") {
         Ok(image) => image_ref = image,
-        Err(_) => panic!("Couldnt load the provided image in the generic test")
+        Err(_) => panic!("Couldnt load the provided image in the arm64 test")
     }
 
     // Testing if the images have the right width/height
