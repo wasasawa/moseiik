@@ -19,10 +19,10 @@ RUN apk add --no-cache \
 WORKDIR /app
 
 #Download the tiles' zip
-#ADD https://nasext-vaader.insa-rennes.fr/ietr-vaader/moseiik_test_images.zip /app
-#remove comment when insa server is up lmao
+ADD https://nasext-vaader.insa-rennes.fr/ietr-vaader/moseiik_test_images.zip /app
 
-COPY moseiik_test_images.zip  .
+
+
 #Installing necessary things to unzip, unzipping then removin the zip
 RUN  unzip /app/moseiik_test_images.zip -d /app && rm /app/moseiik_test_images.zip
 
