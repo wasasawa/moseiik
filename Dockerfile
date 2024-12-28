@@ -23,8 +23,8 @@ ADD https://nasext-vaader.insa-rennes.fr/ietr-vaader/moseiik_test_images.zip /ap
 
 
 
-#Installing necessary things to unzip, unzipping then removin the zip
-RUN  unzip /app/moseiik_test_images.zip -d /app && rm /app/moseiik_test_images.zip
+# Unzipping then removin the zip
+RUN  unzip /app/moseiik_test_images.zip -d /app/moseiik_test_images && rm /app/moseiik_test_images.zip
 
 #Copy all the files in the folder except what's precised in .dockerignore
 COPY . .
