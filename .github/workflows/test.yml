@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - ci_test
+      - main
   pull_request:
     branches:
-      - ci_test
+      - main
 
 jobs:
   build-and-test:
