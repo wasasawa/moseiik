@@ -1,6 +1,7 @@
 name: CI moseiik
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
