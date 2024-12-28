@@ -541,7 +541,7 @@ mod tests {
         // Compare the two images using the l1_neon function inside the unsafe scope
         let result2: i32;
         unsafe {
-           result2 = super::l1_neon(&img1, &img2);
+           result2 = super::l1_neon(&img3, &img4);
         }
 
         assert_eq!(result2, 0,"Difference between 2 identical images should be 0 which is not the case"); // Images are identical so the difference must be 0 
