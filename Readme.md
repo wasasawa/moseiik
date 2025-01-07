@@ -1,3 +1,5 @@
+# Done by RIMAOUI Walid, SAADATE Wajih
+
 # Integration tests 
 
 To execute the integration tests, the moseiik_test_images folder should be in this directory, check path in /tests/temp.rs
